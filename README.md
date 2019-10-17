@@ -1,9 +1,9 @@
-# snippets
+# Snippets
 
 Random Snippets of code and configuration for various tasks, projects, and testing.
 
 
-# CloudCustodian
+## CloudCustodian
 * EC2 Tagging Compliance - Containts various policies for the following tasks
   * Tag instaces with key:value that denotes it's managed by CloudCustodian I.E. Custodian:true (Set to RunInstance)
   * Check for compliance on specific tag(s) - If not compliant mark for op - I.E. Stop after 3 days (Set to state:running)
@@ -13,9 +13,12 @@ Random Snippets of code and configuration for various tasks, projects, and testi
   * Contains .json policy document to perform the above actions
 
 
-# TerraForm
+## TerraForm
 
 
 
-# AWS
+## AWS
 
+
+
+## Kubernetes
