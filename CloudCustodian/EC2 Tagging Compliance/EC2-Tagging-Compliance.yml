@@ -21,11 +21,11 @@ policies:
   - name: ec2-tag-compliance-mark-Owner-Application-Project
     resource: ec2
     mode:
-      packages: [boto3, botocore, urllib3]
-      type: ec2-instance-state
+      packages: [boto3, botocore, urllib3] # Needed for Lambda
+      type: ec2-instance-state # Trigger based on specific Event state
       role: arn:aws:iam::725113403247:role/custodian-tagging
       events:
-         - running
+         - running # When instance state switches to running, trigger
     filters:
             - "tag:Custodian": 'true' # Make sure it's managed by CC, if not, ignore
             - "tag:aws:autoscaling:groupName": absent # Make sure it's not part of an ASG, as changes wouldnt persist
