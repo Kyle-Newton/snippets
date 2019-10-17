@@ -1,16 +1,16 @@
-policies:
+policies: #currently set to run in lambda every 30 minutes to see if the instance is complaint yet
  - name: ec2-recheck-tag-compliance
    resource: ec2
-   mode:
-     packages: [boto3, botocore, urllib3]
-     type: periodic
+   mode: # Deploy in lambda, triggered periodically based on schedule value
+     packages: [boto3, botocore, urllib3] 
+     type: periodic # Requires a schedule in either cron or rate format
      role: arn:aws:iam::725113403247:role/custodian-tagging
-     schedule: "rate(30 minutes)"
-   filters:
-     - "tag:Custodian": 'true'
-     - "tag:Application": present
+     schedule: "rate(30 minutes)" # Runs every 30 minutes (00 and 30)
+   filters: # The following basically says if Custodian manages it, AND ALL the following tags are present, to perform action
+     - "tag:Custodian": 'true' 
+     - "tag:Application": present 
      - "tag:Owner": present
      - "tag:Project": present
-   actions:
+   actions: # If all the above tags exists, we are remediated and we can remove the mark-for-op value (i.e. 'stop')
      - type: untag
        tags: [ "maid_status" ]
