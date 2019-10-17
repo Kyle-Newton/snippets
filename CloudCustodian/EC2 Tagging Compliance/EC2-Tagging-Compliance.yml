@@ -1,19 +1,19 @@
 policies:
   - name: ec2-tag-instances-with-custodian-tag
     resource: ec2
-    mode:
-      packages: [boto3, botocore, urllib3]
+    mode: # Deploy to lambda and trigger on event
+      packages: [boto3, botocore, urllib3] # Needed for lambda
       type: cloudtrail
       role: arn:aws:iam::725113403247:role/custodian-tagging
       events:
-        - RunInstances
+        - RunInstances # RunInstances is a built in, no need for source/event/Ids
     filters:
-     - "tag:Custodian": absent
-    actions:
+     - "tag:Custodian": absent # Ignore instances that already have a Custodian tag
+    actions: # Adds a Custodian:true Key:value to the instance, used later to denote it's managed by CC
       - type: tag
         key: Custodian
         value: 'true'
-      - type: post-finding
+      - type: post-finding # Post to AWS Security Hub
         severity_normalized: 20
         types:
           - "Software and Configuration Checks"
@@ -27,18 +27,18 @@ policies:
       events:
          - running
     filters:
-            - "tag:Custodian": 'true'
-            - "tag:aws:autoscaling:groupName": absent
-            - "tag:c7n_status": absent
-            - or:
-              - "tag:Owner": absent
+            - "tag:Custodian": 'true' # Make sure it's managed by CC, if not, ignore
+            - "tag:aws:autoscaling:groupName": absent # Make sure it's not part of an ASG, as changes wouldnt persist
+            - "tag:c7n_status": absent # make sure it's not already being actively worked on
+            - or: # If ANY of the following are missing, perform the action
+              - "tag:Owner": absent 
               - "tag:Application": absent
               - "tag:Project": absent
-    actions:
-       - type: mark-for-op
-         op: stop
-         days: 3
-       - type: post-finding
+    actions: 
+       - type: mark-for-op # built in command to add a default "maid status" key
+         op: stop # Will add stop to the maid status Value
+         days: 3 # Will look like stop@date IE if run on 2019/1/1 we would see stop@2019/1/4
+       - type: post-finding # Post to AWS Security Hub
          severity_normalized: 30
          types:
            - "Software and Configuration Checks"
