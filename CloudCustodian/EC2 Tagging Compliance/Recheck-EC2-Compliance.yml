@@ -1,0 +1,16 @@
+policies:
+ - name: ec2-recheck-tag-compliance
+   resource: ec2
+   mode:
+     packages: [boto3, botocore, urllib3]
+     type: periodic
+     role: arn:aws:iam::725113403247:role/custodian-tagging
+     schedule: "rate(30 minutes)"
+   filters:
+     - "tag:Custodian": 'true'
+     - "tag:Application": present
+     - "tag:Owner": present
+     - "tag:Project": present
+   actions:
+     - type: untag
+       tags: [ "maid_status" ]

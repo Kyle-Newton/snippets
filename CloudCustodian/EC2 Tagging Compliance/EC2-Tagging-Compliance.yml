@@ -1,0 +1,44 @@
+policies:
+  - name: ec2-tag-instances-with-custodian-tag
+    resource: ec2
+    mode:
+      packages: [boto3, botocore, urllib3]
+      type: cloudtrail
+      role: arn:aws:iam::725113403247:role/custodian-tagging
+      events:
+        - RunInstances
+    filters:
+     - "tag:Custodian": absent
+    actions:
+      - type: tag
+        key: Custodian
+        value: 'true'
+      - type: post-finding
+        severity_normalized: 20
+        types:
+          - "Software and Configuration Checks"
+
+  - name: ec2-tag-compliance-mark-Owner-Application-Project
+    resource: ec2
+    mode:
+      packages: [boto3, botocore, urllib3]
+      type: ec2-instance-state
+      role: arn:aws:iam::725113403247:role/custodian-tagging
+      events:
+         - running
+    filters:
+            - "tag:Custodian": 'true'
+            - "tag:aws:autoscaling:groupName": absent
+            - "tag:c7n_status": absent
+            - or:
+              - "tag:Owner": absent
+              - "tag:Application": absent
+              - "tag:Project": absent
+    actions:
+       - type: mark-for-op
+         op: stop
+         days: 3
+       - type: post-finding
+         severity_normalized: 30
+         types:
+           - "Software and Configuration Checks"

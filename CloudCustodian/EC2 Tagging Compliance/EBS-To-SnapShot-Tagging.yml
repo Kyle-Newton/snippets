@@ -1,0 +1,21 @@
+policies:
+ - name: copy-tags-from-ebs-volume-to-snapshot
+   resource: ebs-snapshot
+   mode:
+     packages: [boto3, botocore, urllib3]
+     type: cloudtrail
+     role: arn:aws:iam::725113403247:role/custodian-tagging
+     events:
+       - source: ec2.amazonaws.com
+         event: CreateSnapshot
+         ids: "responseElements.snapshotId"
+   actions:
+     - type: copy-related-tag
+       resource: ebs
+       skip_missing: True
+       key: VolumeId
+       tags: '*'
+     - type: post-finding
+       severity_normalized: 20
+       types:
+         - "Software and Configuration Checks"

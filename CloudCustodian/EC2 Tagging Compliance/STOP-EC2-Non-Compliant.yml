@@ -1,0 +1,20 @@
+policies:
+ - name: ec2-stop-marked
+   resource: ec2
+   mode:
+     packages: [boto3, botocore, urllib3]
+     type: periodic
+     role: arn:aws:iam::725113403247:role/custodian-tagging
+     schedule: "rate(1 hour)"
+   filters: 
+     - type: marked-for-op
+       tag: maid_status
+       op: stop
+       tz: pst
+   actions:
+     - type: stop
+     - type: post-finding
+       severity_normalized: 75
+       types: 
+         - "Software and Configuration Checks"
+
