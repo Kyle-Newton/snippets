@@ -22,3 +22,10 @@ Random Snippets of code and configuration for various tasks, projects, and testi
 
 
 ## Kubernetes
+Login commands:
+#### Google Cloud:
+gcloud container clusters get-credentials ${cluster}
+#### Microsoft Azure:
+az aks get-credentials --resource-group ${RS} --name ${cluster}
+#### AWS:
+aws eks --region ${region} update-kubeconfig --name ${cluster}
