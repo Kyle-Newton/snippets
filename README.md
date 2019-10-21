@@ -22,10 +22,13 @@ Random Snippets of code and configuration for various tasks, projects, and testi
 
 
 ## Kubernetes
-Login commands:
+### Login commands:
 #### Google Cloud:
 gcloud container clusters get-credentials ${cluster}
 #### Microsoft Azure:
 az aks get-credentials --resource-group ${RS} --name ${cluster}
 #### AWS:
 aws eks --region ${region} update-kubeconfig --name ${cluster}
+
+### Starting Nodes on AWS
+https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
