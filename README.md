@@ -21,7 +21,7 @@ Random Snippets of code and configuration for various tasks, projects, and testi
 
 
 
-## Kubernetes
+## Kubernetes - A dump of random things that will get converting into snippet files later
 ### Login commands:
 #### Google Cloud:
 gcloud container clusters get-credentials ${cluster}
