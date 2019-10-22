@@ -33,3 +33,9 @@ aws eks --region ${region} update-kubeconfig --name ${cluster}
 
 ### Starting Nodes on AWS
 https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
+
+### Useful commands
+kubectl get nodes --> Shows nodes, check if nodes are up and registered to the cluster
+kubectl get pods (-o wide) --> shows pods, checks status of the pods on the node(s)
+kubectl apply -f "service.yml" - Deploy a service to nodes, as pods
+kubectl get deploy  - Show the deployment
