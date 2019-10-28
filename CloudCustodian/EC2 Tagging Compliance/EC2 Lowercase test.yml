@@ -1,0 +1,9 @@
+policies:
+  - name: ec2-service-transform-lower
+    resource: ec2
+    query:
+      - instance-state-name: running
+    actions:
+      - type: normalize-tag
+        key: lower_key
+        action: lower
