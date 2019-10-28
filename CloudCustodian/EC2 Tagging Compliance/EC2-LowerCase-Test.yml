@@ -3,8 +3,11 @@ policies:
     resource: ec2
     actions:
       - type: normalize-tag
-        key: Application
+        key: Service
         action: lower
       - type: normalize-tag
-        key: Owner
+        key: Project
+        action: lower
+      - type: normalize-tag
+        key: Creator
         action: lower
